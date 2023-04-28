@@ -3,7 +3,7 @@
 #include "fcntl.h"
 
 void foo() {
-  printf(1, " SECRET_STRING ");
+  printf(1, "SECRET_STRING");
 }
 
 void vulnerable_function(char * input) {
@@ -12,7 +12,7 @@ void vulnerable_function(char * input) {
 }
 
 int main(int argc, char ** argv) {
-  int fd = open(" payload ", O_RDONLY);
+  int fd = open("payload", O_RDONLY);
   char payload[100];
   read(fd, payload, 100);
   vulnerable_function(payload);
