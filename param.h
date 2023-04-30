@@ -12,3 +12,7 @@
 #define NBUF         (MAXOPBLOCKS*3)  // size of disk block cache
 #define FSSIZE       1000  // size of file system in blocks
 #define ASLR_FLAG_FILE "aslr_flag"
+#define MAX_RAND     2147483647 // Maximum value of the random number generator
+#define PAGESIZE     4096      // Page size (assumed to be 4KB)
+#define ROUNDUP(n, sz) (((n) + (sz) - 1) & ~((sz) - 1)) // Round up to the nearest page boundary
+
