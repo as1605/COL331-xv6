@@ -245,6 +245,12 @@ allocuvm(pde_t *pgdir, uint oldsz, uint newsz)
       return 0;
     }
   }
+  if (proc && proc->aslr_offset && proc->sz > 0 && proc->aslr_offset % PAGESIZE == 0) {
+    // Randomize the memory layout by adding a random offset to the new size
+      int offset = rand() % (newsz / PAGESIZE);
+      newsz += offset * PAGESIZE;
+      proc->aslr_offset = offset * PAGESIZE;
+  }
   return newsz;
 }
 
