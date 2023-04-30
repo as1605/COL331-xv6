@@ -668,3 +668,22 @@ nameiparent(char *path, char *name)
 {
   return namex(path, 1, name);
 }
+
+// Part 2: aslr_flag file creation when xv6 is run
+void init_aslr_flag(void)
+{
+  struct inode *ip;
+  if ((ip = namei(ASLR_FLAG_FILE)) == 0) {
+    // Create the aslr_flag file
+    if ((ip = create(ASLR_FLAG_FILE, T_FILE, 0, 0)) == 0) {
+      cprintf("init_aslr_flag: create failed\n");
+      return;
+    }
+    ip->mode = 0666;
+    ip->flags |= I_VALID;
+    iupdate(ip);
+  }
+  else {
+    iput(ip);
+  }
+}
