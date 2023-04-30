@@ -532,3 +532,18 @@ procdump(void)
     cprintf("\n");
   }
 }
+
+// random number generator
+static uint32_t rand_seed = 1;
+
+void srand(uint32_t seed)
+{
+  rand_seed = seed;
+}
+
+uint32_t rand(void)
+{
+  rand_seed = rand_seed * 1103515245 + 12345;
+  return rand_seed & MAX_RAND;
+}
+
