@@ -20,6 +20,11 @@
 #include "fs.h"
 #include "buf.h"
 #include "file.h"
+#include "user.h"
+#include "fcntl.h"
+
+#define I_VALID 0x18042008
+
 
 #define min(a, b) ((a) < (b) ? (a) : (b))
 static void itrunc(struct inode*);
@@ -672,7 +677,9 @@ nameiparent(char *path, char *name)
 // Part 2: aslr_flag file creation when xv6 is run
 void init_aslr_flag(void)
 {
-  struct inode *ip;
+  
+  struct inode* ip;
+
   if ((ip = namei(ASLR_FLAG_FILE)) == 0) {
     // Create the aslr_flag file
     if ((ip = create(ASLR_FLAG_FILE, T_FILE, 0, 0)) == 0) {
@@ -684,6 +691,8 @@ void init_aslr_flag(void)
     iupdate(ip);
   }
   else {
+    int fd = open("aslr_flag", O_CREAT | O_RDWR);
+    ip = fd2inode(fd);
     iput(ip);
   }
 }
