@@ -68,6 +68,19 @@ exec(char *path, char **argv)
   clearpteu(pgdir, (char*)(sz - 2*PGSIZE));
   sp = sz;
 
+ // Initialize the random number generator with a seed based on the current time
+ srand(rdclock());
+
+  // Enable ASLR if the aslr_flag file contains a value of 1
+  struct inode *ip = namei(ASLR_FLAG_FILE);
+  if (ip) {
+    char buf[10];
+    readi(ip, buf, 0, sizeof(buf));
+    iput(ip);
+    if (buf[0] == '1') {
+      proc->aslr_offset = ROUNDUP(rand(), PAGESIZE);
+    }
+  }
   // Push argument strings, prepare rest of stack in ustack.
   for(argc = 0; argv[argc]; argc++) {
     if(argc >= MAXARG)
